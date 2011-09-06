@@ -1,0 +1,57 @@
+--- The Modular Artithmatic Calcultor ---
+
+1. Overview
+2. base functionality
+3. Unary operators
+4. binary operators
+5. Other tests
+
+
+1. Overview
+
+   This calculator is writen using the JavaScript language.  It has been designed with modular arithmatic in mind, but does support some standard integer arithmatic as well.  It operates in a Reverse Polish Notation fassion.
+
+2. base functionality
+
+
+ - Modulus is automaticly applied to all math opperation.  This can be toggled off with the "engadge Modulus" checkbox.  The number in the "working modulus" field is the global modulus which will be applied to all math operations (where applicable).
+ - set% - sets the working modulus to the top value of the stack.  clears the top stack entry unless the stack only has one number in it.
+ - When the "show work" option is active, certian opperations will display the associated underlying work to arrive at the answer.
+ - copy - pushes a copy of the top value of the stack onto the stack.
+ - ce/c - removes the top line from the stack.
+ - Error messages will appear above the stack in times of "need".  Stack will remain unchanged in the event of an error.
+
+3. Unary operators
+
+   +- (sign change)
+   mod
+   ^-1 (multiplicative inverse)
+   ^2
+   ^3
+   *sqrt* (not yet implimented)
+   *c-rt* (cube root) (not yet implimented)
+
+   engadge modulus affects: +-, ^2, ^3, (sqrt, c-rt)
+
+4. binary operators
+
+   + (addition)
+   - (subtraction)
+   * (multiplication)
+   ^n (nth powers)
+   *n-rt* (nth roots) (not yet implimented)
+
+   engadge modulus affects: +, -, *, ^n, (n-rt)
+
+5. Other opperations
+
+   gcd - finds the gcd of the top 2 stack values.
+   Fermat test - uses top stack value as the base in the
+      fermat test using the working modulus.
+   Miller-Rabin test - uses top stack value as the base in
+      the Miller-Rabin test using the working modulus.
+
+6. underlying algorithms
+
+   - Fast exponention (^2, ^3, ^n, Fermat test)
+   - Euclid's Algorithm (gcd and ^-1)
