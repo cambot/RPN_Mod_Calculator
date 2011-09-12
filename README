@@ -13,7 +13,6 @@
 
 2. base functionality
 
-
  - Modulus is automaticly applied to all math opperation.  This can be toggled off with the "engadge Modulus" checkbox.  The number in the "working modulus" field is the global modulus which will be applied to all math operations (where applicable).
  - set% - sets the working modulus to the top value of the stack.  clears the top stack entry unless the stack only has one number in it.
  - When the "show work" option is active, certian opperations will display the associated underlying work to arrive at the answer.

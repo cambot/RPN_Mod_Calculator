@@ -1,0 +1,8 @@
+Need to impliment:
+- roots
+  - square (6)
+  - cube (7)
+  - n-root (15)
+
+Need to fix:
+- multiplicative inverse on a negative number gives "Mult. inv. does not exist".  Should better handle negative input.  Possibly force output to positive either before or after computation.
