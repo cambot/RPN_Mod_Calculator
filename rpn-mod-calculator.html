@@ -88,11 +88,7 @@ function performOpp(opp){
 
     switch(opp){
     case 1: // sign change
-      if(modon){
-        if(pop1>0){ ans = pop1 - modulo}
-        if(pop1<0){ ans = pop1 + modulo}
-      }
-      else{ans = -pop1}
+	ans = changeSign(pop1, modon)
       break;
 
     case 2: // modulus
@@ -100,6 +96,7 @@ function performOpp(opp){
       break;
 
     case 3: // mult. inverse
+      if ( (pop1 < 0) && modon) {pop1 = changeSign(pop1, modon)}
       ans = euclidAlg(modulo, pop1, 2)
       if(ans == 0) return;
       break;
@@ -167,6 +164,16 @@ function performOpp(opp){
   }
   changeable=false
   displayStack()
+}
+
+function changeSign(x, modon) {
+   var ans=0;
+   if(modon){
+     if(x>0){ ans = x - modulo }
+     if(x<0){ ans = x + modulo }
+   }
+   else{ans = -x}
+   return ans
 }
 
 function fastexp(base, exp){
