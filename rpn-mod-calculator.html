@@ -15,323 +15,329 @@
 
   *****/
 
-workwindow=null
+workwindow = null;
 stack = new Array(6);
-stack[0]=0
+stack[0] = 0;
 stackTop = 0;
 modulo = 10;
-changeable=true; 
+changeable = true; 
 
 
 function checkMod(){
-  var test = document.modcalc.elements["Modulus"].value
+  var test = document.modcalc.elements["Modulus"].value;
 
-  if(test != parseInt(test)){
-    document.modcalc.elements["Modulus"].value=modulo
-    document.modcalc.elements["ErrorBox"].value="Modulus must be an integer"
+  if(test != parseInt(test, 10)) {
+    document.modcalc.elements["Modulus"].value=modulo;
+    document.modcalc.elements["ErrorBox"].value="Modulus must be an integer";
   }
-  else{
-    modulo=parseInt(test)
-    document.modcalc.elements["ErrorBox"].value=""
+  else {
+    modulo=parseInt(test, 10);
+    document.modcalc.elements["ErrorBox"].value="";
   }
 }
 
 function setMod(){
-  if(stackTop>=0){
+  if(stackTop>=0) {
     test = stack[stackTop];
-    if(test==0){return}
-    modulo=test
-    document.modcalc.elements["Modulus"].value=modulo
-    if(stackTop>=0){stackTop--}
-    else{stack[0]=0}
-    changeable=false
-    displayStack()
+    if(test === 0) { return; }
+    modulo=test;
+    document.modcalc.elements["Modulus"].value=modulo;
+    if(stackTop >= 0) { stackTop--; }
+    else { stack[0]=0; }
+    changeable=false;
+    displayStack();
   }
 }
 
 function displayStackLine(n){
-  document.modcalc.elements["ErrorBox"].value=""
-  var a = stackTop-n
-  var elem = "Display" + n
-  if(a>=0)
-    document.modcalc.elements[elem].value=stack[a];
-  else
-    document.modcalc.elements[elem].value="";
+  document.modcalc.elements["ErrorBox"].value="";
+  var a = stackTop-n;
+  var elem = "Display" + n;
+  if(a>=0) { document.modcalc.elements[elem].value=stack[a]; }
+  else { document.modcalc.elements[elem].value=""; }
 }
 
 function displayStack(){
-  var i
-  for(i=0;i<3;i++)
-    displayStackLine(i)
+  var i;
+  for(i=0;i<3;i++) {
+    displayStackLine(i);
+  }
 }
 
 
 function addDiget(value){
-  if(!changeable)
-    pushMe()
-  stack[stackTop] = stack[stackTop]*10 + value
-  displayStackLine(0)
+  if(!changeable) { pushMe(); }
+  stack[stackTop] = stack[stackTop]*10 + value;
+  displayStackLine(0);
 }
 
 function performOpp(opp){
   // performs opperation opp on appropriate values of the stack
-  var pop1, pop2
-  var modon=document.modcalc.elements["ModOn"].checked
+  var pop1, pop2;
+  var modon=document.modcalc.elements["ModOn"].checked;
 
   if(opp==15){    // catch all to give more accurate alert if only one value on stack.  Remove once implimented.
-    alert("not yet implimented")
-    return
+    alert("not yet implimented");
+    return;
   }
 
   if(opp<=10){ // one pop opperations
-    pop1=stack[stackTop]
+    pop1=stack[stackTop];
 
     switch(opp){
     case 1: // sign change
-	ans = changeSign(pop1, modon)
+      ans = changeSign(pop1, modon);
       break;
 
     case 2: // modulus
-      ans = pop1 % modulo
+      ans = pop1 % modulo;
       break;
 
     case 3: // mult. inverse
-      if ( (pop1 < 0) && modon) {pop1 = changeSign(pop1, modon)}
-      ans = euclidAlg(modulo, pop1, 2)
+      if ( (pop1 < 0) && modon) { pop1 = changeSign(pop1, modon); }
+      ans = euclidAlg(modulo, pop1, 2);
       if(ans == 0) return;
       break;
     case 4: // square
-      ans = fastexp(pop1, 2)
+      ans = fastexp(pop1, 2);
       break;
     case 5: // cube
-      ans = fastexp(pop1, 3)
+      ans = fastexp(pop1, 3);
       break;
     case 6: // sqrt
-      alert("not yet implimented")
-	return
+      alert("not yet implimented");
+	return;
       break;
     case 7: // cube root
-      alert("not yet implimented")
-	return
+      alert("not yet implimented");
+	return;
       break;
     case 8:
-      fermat()
+      fermat();
       return;
-      break
+      break;
     case 9: // Miller-Rabin Test
-      MillerRabin()
-      return
+      MillerRabin();
+      return;
       break;
     }
-    stack[stackTop]=ans
+    stack[stackTop]=ans;
   }
   if(opp>10){ // two pop opperations
-    if(stackTop<1){
-      document.modcalc.elements["ErrorBox"].value="not enough numbers for opperation"
+    if(stackTop<1) {
+      document.modcalc.elements["ErrorBox"].value="not enough numbers for opperation";
       return;
     }
-    pop1=stack[stackTop]
-    pop2=stack[stackTop-1]
+    pop1=stack[stackTop];
+    pop2=stack[stackTop-1];
 
-    switch(opp){
+    switch(opp) {
     case 11: // addition
-      ans = pop2 + pop1
-      if(modon){ ans = ans % modulo}
+      ans = pop2 + pop1;
+      if(modon) { ans = ans % modulo; }
       break;
 
     case 12: // subtraction
-      ans = pop2 - pop1
-      if(modon){ ans = ans % modulo}
+      ans = pop2 - pop1;
+      if(modon) { ans = ans % modulo; }
       break;
     case 13: // multiplication
-      ans = pop2 * pop1
-      if(modon){ ans = ans % modulo}
+      ans = pop2 * pop1;
+      if(modon) { ans = ans % modulo; }
       break;
     case 14: // nth powers
-      ans = fastexp(pop2, pop1)
+      ans = fastexp(pop2, pop1);
       break;
     case 15: // nth roots
-      alert("not yet implimented")
-      return
+      alert("not yet implimented");
+      return;
       break;
     case 16: // GCD
-      ans = euclidAlg(pop2, pop1, 1)
+      ans = euclidAlg(pop2, pop1, 1);
       break;
     }
-    stackTop--
-    stack[stackTop]=ans
+    stackTop--;
+    stack[stackTop]=ans;
 
   }
-  changeable=false
-  displayStack()
+  changeable=false;
+  displayStack();
 }
 
 function changeSign(x, modon) {
    var ans=0;
-   if(modon){
-     if(x>0){ ans = x - modulo }
-     if(x<0){ ans = x + modulo }
+   if(modon) {
+     if(x>0) { ans = x - modulo; }
+     if(x<0) { ans = x + modulo; }
    }
-   else{ans = -x}
-   return ans
+   else {ans = -x;}
+   return ans;
 }
 
 function fastexp(base, exp){
-  var coef=1
-  var work = "" + coef + "(" + base + ")^" + exp +"\n"
-  if(exp>3){ flag = true}
-  else{flag = false}
-  while(exp>0){
-    if(exp%2==0){
-      base *= base
-      exp = exp / 2
+  var coef=1;
+  var work = "" + coef + "(" + base + ")^" + exp +"\n";
+  if(exp>3) { flag = true; }
+  else { flag = false; }
+  while(exp>0) {
+    if(exp%2==0) {
+      base *= base;
+      exp = exp / 2;
     }
-    else{
-      coef *= base
-      exp--
+    else {
+      coef *= base;
+      exp--;
     }
     
-    if(document.modcalc.elements["ModOn"].checked){
-	base= base%modulo
-	coef = coef%modulo
+    if(document.modcalc.elements["ModOn"].checked) {
+	base = base%modulo;
+	coef = coef%modulo;
     }
-    work += coef + "(" + base + ")^" + exp +"\n"
+    work += coef + "(" + base + ")^" + exp +"\n";
   }
-  if(document.modcalc.elements["ShowWork"].checked && flag){
-    document.modcalc.elements["work"].value=work}
+  if(document.modcalc.elements["ShowWork"].checked && flag) {
+    document.modcalc.elements["work"].value=work;
+  }
   return coef;
 }
 
 function euclidAlg(a, b, op){
-  var d = new Array(3)
-  var c1 = new Array(2)
-  var work = ""
+  var d = new Array(3);
+  var c1 = new Array(2);
+  var work = "";
 
-  var temp, ctemp
-  var i=0
-  if(a>b){
-    d[0] = a
-    d[1] = b
+  var temp, ctemp;
+  var i=0;
+  if(a>b) {
+    d[0] = a;
+    d[1] = b;
   }
-  else{
-    d[0] = b
-    d[1] = a
+  else {
+    d[0] = b;
+    d[1] = a;
   }
-  c1[0] = 1
+  c1[0] = 1;
 
-  do{
-    c1[i+1]=-Math.floor(d[i]/d[i+1])
-    d[i+2] = d[i] + c1[i+1] * d[i+1]
-    work += d[i] + " + (" + c1[i+1]+ ")" + d[i+1] + " = " + d[i+2] + "\n"
-    i++
-  }while(d[i+1]!=0)
-  if(op == 1){
-    if(document.modcalc.elements["ShowWork"].checked){
-      document.modcalc.elements["work"].value=work}
-    return d[i] } // gcd
+  do {
+    c1[i+1]=-Math.floor(d[i]/d[i+1]);
+    d[i+2] = d[i] + c1[i+1] * d[i+1];
+    work += d[i] + " + (" + c1[i+1]+ ")" + d[i+1] + " = " + d[i+2] + "\n";
+    i++;
+  } while(d[i+1]!=0)
+  if(op == 1) {
+    if(document.modcalc.elements["ShowWork"].checked) {
+      document.modcalc.elements["work"].value=work;
+    }
+    return d[i];
+  } // gcd
 
-  if(op == 2 && d[i] !=1){     // if gcd != 1, mult inv does not exist
-    if(document.modcalc.elements["ShowWork"].checked){
-      document.modcalc.elements["work"].value=work}
-    document.modcalc.elements["ErrorBox"].value="Mult. inv. does not exist"
+  if(op == 2 && d[i] !=1) {     // if gcd != 1, mult inv does not exist
+    if(document.modcalc.elements["ShowWork"].checked) {
+      document.modcalc.elements["work"].value=work;
+    }
+    document.modcalc.elements["ErrorBox"].value="Mult. inv. does not exist";
     return 0;
   }
 
-  var c2 = new Array(c1.length)
+  var c2 = new Array(c1.length);
   i-=2;
-  c2[i] = 1
-  c2[i+1] = c1[i+1]
+  c2[i] = 1;
+  c2[i+1] = c1[i+1];
 
-  do{
-    work += "1 = (" + c2[i] + ")"+d[i] + " + (" + c2[i+1]+ ")" + d[i+1] + "\n"
-    i--
-    c2[i] = c2[i+2]
-    c2[i+1] += c2[i+2]*c1[i+1]
-  }while(i>=0)
+  do {
+    work += "1 = (" + c2[i] + ")"+d[i] + " + (" + c2[i+1]+ ")" + d[i+1] + "\n";
+    i--;
+    c2[i] = c2[i+2];
+    c2[i+1] += c2[i+2]*c1[i+1];
+  } while(i>=0)
 
-  if(document.modcalc.elements["ShowWork"].checked){
-    document.modcalc.elements["work"].value=work}
+  if(document.modcalc.elements["ShowWork"].checked) {
+    document.modcalc.elements["work"].value=work;
+  }
   return c2[1];
 
 }
 
 function fermat(){
-  if(fastexp(stack[stackTop], modulo-1) == 1)
-    document.modcalc.elements["ErrorBox"].value="pass"
-  else
-    document.modcalc.elements["ErrorBox"].value="fail"
+  if(fastexp(stack[stackTop], modulo-1) == 1) {
+    document.modcalc.elements["ErrorBox"].value="pass";
+  }
+  else {
+    document.modcalc.elements["ErrorBox"].value="fail";
+  }
   changeable=false;
 }
 
 function MillerRabin(){
-  changeable=false
-  if(modulo%2==0){
-    document.modcalc.elements["ErrorBox"].value="fail"
-    return}
-  var work=""
+  changeable=false;
+  if(modulo%2==0) {
+    document.modcalc.elements["ErrorBox"].value="fail";
+    return;
+  }
+  var work="";
 
-  var s=0, r=0, m=modulo-1
-  var b=stack[stackTop]
+  var s=0, r=0, m=modulo-1;
+  var b=stack[stackTop];
 
 
-  while(m%2==0){
-    s++
-    m=m/2
+  while(m%2==0) {
+    s++;
+    m=m/2;
   }  
-  b=fastexp(b, m)
-  work += "s=" + s + ", m=" + m + ", b^m=" + b + "\n"
+  b=fastexp(b, m);
+  work += "s=" + s + ", m=" + m + ", b^m=" + b + "\n";
 
-  if(b==1 || b == -1){
-    document.modcalc.elements["ErrorBox"].value="fail"
-    document.modcalc.elements["work"].value=work
-    return
+  if(b==1 || b == -1) {
+    document.modcalc.elements["ErrorBox"].value="fail";
+    document.modcalc.elements["work"].value=work;
+    return;
   }
-  r=1
-  while(r<s){
-    b=fastexp(b, 2)
+  r=1;
+  while(r<s) {
+    b=fastexp(b, 2);
 
-    work += "b=" + b + ", r=" + r + "\n"
-    if(b==-1 || b==modulo-1){
-      document.modcalc.elements["ErrorBox"].value="pass"
-      document.modcalc.elements["work"].value=work
-      return
+    work += "b=" + b + ", r=" + r + "\n";
+    if(b==-1 || b==modulo-1) {
+      document.modcalc.elements["ErrorBox"].value="pass";
+      document.modcalc.elements["work"].value=work;
+      return;
     }
-    if(b==1){
-      document.modcalc.elements["ErrorBox"].value="fail"
-      document.modcalc.elements["work"].value=work
-      return
+    if(b==1) {
+      document.modcalc.elements["ErrorBox"].value="fail";
+      document.modcalc.elements["work"].value=work;
+      return;
     }
-   r++
+   r++;
   }
-  document.modcalc.elements["ErrorBox"].value="fail"
-  document.modcalc.elements["work"].value=work
+  document.modcalc.elements["ErrorBox"].value="fail";
+  document.modcalc.elements["work"].value=work;
 }
 
 //--- end calc functions ---//
 
 function pushMe(){
-  stackTop++
-  stack[stackTop]=0
-  displayStack()
-  changeable=true
+  stackTop++;
+  stack[stackTop]=0;
+  displayStack();
+  changeable=true;
 }
 
 function clearMe(){
-  if(stackTop>=0){
-    stackTop--
-    displayStack()
-    changeable=false
+  if(stackTop>=0) {
+    stackTop--;
+    displayStack();
+    changeable=false;
   }
-  document.modcalc.elements["work"].value=""
+  document.modcalc.elements["work"].value="";
 
 }
 
 function copyTop(){
-  if(stackTop>=0){
-    pushMe()
-    stack[stackTop]=stack[stackTop-1]
-    displayStack()
-    changeable=false
+  if(stackTop>=0) {
+    pushMe();
+    stack[stackTop]=stack[stackTop-1];
+    displayStack();
+    changeable=false;
   }
 }
 
