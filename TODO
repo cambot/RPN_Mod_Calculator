@@ -3,3 +3,6 @@ Need to impliment:
   - square (6)
   - cube (7)
   - n-root (15)
+
+known issues:
+- page refresh does not reset forms
