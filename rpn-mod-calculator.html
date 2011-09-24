@@ -105,6 +105,7 @@ function performOpp(opp){
       ans = fastexp(pop1, 3);
       break;
     case 6: // sqrt
+      //
       alert("not yet implimented");
 	return;
       break;
@@ -174,7 +175,7 @@ function changeSign(x, modon) {
    return ans;
 }
 
-function fastexp(base, exp){
+function fastexp(base, exp) {
   var coef=1;
   var work = "" + coef + "(" + base + ")^" + exp +"\n";
   if(exp>3) { flag = true; }
@@ -259,13 +260,18 @@ function euclidAlg(a, b, op){
 }
 
 function fermat(){
-  if(fastexp(stack[stackTop], modulo-1) == 1) {
+  if(fermatTest(stack[stackTop], modulo) === 1) {
     document.modcalc.elements["ErrorBox"].value="pass";
   }
   else {
     document.modcalc.elements["ErrorBox"].value="fail";
   }
   changeable=false;
+}
+
+function fermatTest(n, modulo) {
+  if(fastexp(n, modulo-1) == 1) { return 1; }
+  else { return 0; }
 }
 
 function MillerRabin(){
