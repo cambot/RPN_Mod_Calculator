@@ -279,6 +279,7 @@ function GCD(a, b) {
 function multInv(a, modulo) {
   var ans=0;
   if (a < 0) { a = changeSign(a, 1); }
+  if (a == 1) { return 1; }
   ans=euclidAlg(modulo, a, 2);
   if (ans < 0) { ans = changeSign(ans, 1); }   // always force answer to be positive.
   return ans;

@@ -5,4 +5,3 @@ Need to impliment:
 
 known issues:
 - page refresh does not reset forms
-- 1^(-1) mod 11 produces "Undefined" number.  should, at minimum, be 1.
