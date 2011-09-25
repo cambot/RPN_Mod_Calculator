@@ -94,8 +94,7 @@ function performOpp(opp){
       break;
 
     case 3: // mult. inverse
-      if ( (pop1 < 0) && modon) { pop1 = changeSign(pop1, modon); }
-      ans = euclidAlg(modulo, pop1, 2);
+      ans = multInv(pop1, modulo);
       if(ans == 0) return;
       break;
     case 4: // square
@@ -275,6 +274,14 @@ function euclidAlg(a, b, op){
 
 function GCD(a, b) {
   return euclidAlg(a, b, 1);
+}
+
+function multInv(a, modulo) {
+  var ans=0;
+  if (a < 0) { a = changeSign(a, 1); }
+  ans=euclidAlg(modulo, a, 2);
+  if (ans < 0) { ans = changeSign(ans, 1); }   // always force answer to be positive.
+  return ans;
 }
 
 function fermat(){
