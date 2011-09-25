@@ -105,9 +105,11 @@ function performOpp(opp){
       ans = fastexp(pop1, 3);
       break;
     case 6: // sqrt
-      //
-      alert("not yet implimented");
-	return;
+      ans = sqrt(pop1, modulo) 
+      if (ans == 0) {
+        document.modcalc.elements["ErrorBox"].value="answer not found";
+        return;
+      }
       break;
     case 7: // cube root
       alert("not yet implimented");
@@ -173,6 +175,18 @@ function changeSign(x, modon) {
    }
    else {ans = -x;}
    return ans;
+}
+
+// If base is a prime%4=3
+// Then x^( (base+1)/4) % base) is a possible sqrt of x
+// Test:  modulus=11, 3, 4, 5, 9 will work.
+function sqrt(x, base) {
+   var ans=0;
+   if( (fermatTest(base-2, base) == 1) && ((base % 4) == 3)) {
+     ans = (fastexp(x, ((base+1)/4)) % base);
+     if(fastexp(ans, 2) != x) { ans=0; }
+   }
+   return ans
 }
 
 function fastexp(base, exp) {
@@ -261,7 +275,7 @@ function euclidAlg(a, b, op){
 
 function fermat(){
   if(fermatTest(stack[stackTop], modulo) === 1) {
-    document.modcalc.elements["ErrorBox"].value="pass";
+    document.modcalc.elements["ErrorBox"].value="Modulus is a fermat psudo prime";
   }
   else {
     document.modcalc.elements["ErrorBox"].value="fail";
