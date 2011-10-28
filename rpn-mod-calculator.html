@@ -86,7 +86,7 @@ function performOpp(opp){
 
     switch(opp){
     case 1: // sign change
-      ans = changeSign(pop1, modon);
+      ans = changeSign(pop1, modon, modulo);
       break;
 
     case 2: // modulus
@@ -111,8 +111,11 @@ function performOpp(opp){
       }
       break;
     case 7: // cube root
-      alert("not yet implimented");
-	return;
+      ans = root(3, pop1, modulo) 
+      if (ans == 0) {
+        document.modcalc.elements["ErrorBox"].value="answer not found";
+        return;
+      }
       break;
     case 8:
       fermat();
@@ -166,11 +169,11 @@ function performOpp(opp){
   displayStack();
 }
 
-function changeSign(x, modon) {
+function changeSign(x, modon, base) {
    var ans=0;
    if(modon) {
-     if(x>0) { ans = x - modulo; }
-     if(x<0) { ans = x + modulo; }
+     if(x>0) { ans = x - base;}
+     if(x<0) { ans = x + base; }
    }
    else {ans = -x;}
    return ans;
@@ -186,6 +189,40 @@ function sqrt(x, base) {
      if(fastexp(ans, 2) != x) { ans=0; }
    }
    return ans
+}
+
+// x^n%base
+function root(n, x, base) {
+  var ans=0;
+  var r=0;
+  // IF base is prime & gcd(n, base-1)=1
+  var gcd=GCD(base-1, n);
+  // need test case.
+  if( (fermatTest(base-2, base) == 1) && (gcd == 1) ) {
+    r = multInv(n, base);         // let r=multiplicative inverse of n
+    //alert("r: "+r);
+    if(r != 0) {
+      ans = (fastexp(x, r) % base);    // then (x^r)%base is a candidate
+      //alert("ans: "+ans);
+      if(fastexp(ans, n) == x) { return ans; }  
+    }
+  }
+
+  // valid test: n=3, p=13, x={5, 8}
+  var testExp=0;
+  // if gcd(n, (p-1)/n) = 1
+  if ( (base-1)%n == 0) {
+    testExp=(base-1)/n;
+    gcd=GCD(testExp, n);
+    if (gcd == 1) {
+      // let r=n^(-1)%( (p-1)/n)
+      r = multInv(n, testExp);
+      // then (y^r)%p is a candidate 
+      ans = (fastexp(x, r) % base);
+      if(fastexp(ans, n) == x) { return ans; }  
+    }
+  }
+  return 0;
 }
 
 function fastexp(base, exp) {
@@ -278,10 +315,10 @@ function GCD(a, b) {
 
 function multInv(a, modulo) {
   var ans=0;
-  if (a < 0) { a = changeSign(a, 1); }
+  if (a < 0) { a = changeSign(a, 1, modulo); }
   if (a == 1) { return 1; }
   ans=euclidAlg(modulo, a, 2);
-  if (ans < 0) { ans = changeSign(ans, 1); }   // always force answer to be positive.
+  if (ans < 0) { ans = changeSign(ans, 1, modulo); }   // always force answer to be positive.
   return ans;
 }
 
